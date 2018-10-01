@@ -1,0 +1,161 @@
+---
+title: "Tables"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(stargazer)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+\begin{table}[!htbp] \centering 
+  \caption{Knee Replacement Dataset - Variance Explaining Exercises} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{EQ5D\_Index\_Diff} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{\textit{OLS}} & \multicolumn{1}{c}{\textit{panel}} \\ 
+ & \multicolumn{1}{c}{\textit{}} & \multicolumn{1}{c}{\textit{linear}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)}\\ 
+\hline \\[-1.8ex] 
+ Knee\_Replacement\_PreOp\_Q\_Score & 0.008^{***} & 0.009^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ PreOp\_Q\_Activity & -0.014^{***} & -0.015^{***} \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ PreOp\_Q\_Anxiety & -0.067^{***} & -0.067^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ PreOp\_Q\_Discomfort & 0.010^{**} & 0.010^{**} \\ 
+  & (0.005) & (0.005) \\ 
+  & & \\ 
+ PreOp\_Q\_EQ5D\_Index & -0.936^{***} & -0.938^{***} \\ 
+  & (0.009) & (0.009) \\ 
+  & & \\ 
+ PreOp\_Q\_Mobility & 0.005^{**} & 0.006^{**} \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ PreOp\_Q\_SelfCare & -0.071^{***} & -0.070^{***} \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Confidence & -0.002 & -0.002^{*} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Kneeling & -0.003^{*} & -0.003^{**} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Limping & -0.027^{***} & -0.027^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Night\_Pain & 0.001 & 0.001 \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Pain & -0.016^{***} & -0.017^{***} \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Shopping & 0.008^{***} & 0.006^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Stairs & -0.001 & -0.001 \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Standing & -0.009^{***} & -0.009^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Transport & -0.004^{***} & -0.004^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Walking & 0.002 & 0.001 \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Washing & 0.007^{***} & 0.007^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Knee\_Replacement\_PreOp\_Q\_Work &  &  \\ 
+  &  &  \\ 
+  & & \\ 
+ Age\_Band\_50\_to\_59 & 0.047^{***} & 0.048^{***} \\ 
+  & (0.015) & (0.015) \\ 
+  & & \\ 
+ Age\_Band\_60\_to\_69 & 0.096^{***} & 0.093^{***} \\ 
+  & (0.015) & (0.015) \\ 
+  & & \\ 
+ Age\_Band\_70\_to\_79 & 0.112^{***} & 0.110^{***} \\ 
+  & (0.015) & (0.015) \\ 
+  & & \\ 
+ Age\_Band\_80\_to\_89 & 0.112^{***} & 0.111^{***} \\ 
+  & (0.015) & (0.015) \\ 
+  & & \\ 
+ Age\_Band\_90\_to\_120 & 0.121^{*} & 0.112 \\ 
+  & (0.069) & (0.068) \\ 
+  & & \\ 
+ PreOp\_Q\_Symptom\_Period\_1 & 0.012^{***} & 0.010^{***} \\ 
+  & (0.003) & (0.003) \\ 
+  & & \\ 
+ PreOp\_Q\_Symptom\_Period\_2 & 0.0005 & 0.0003 \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ PreOp\_Q\_Symptom\_Period\_3 & 0.002 & 0.003 \\ 
+  & (0.002) & (0.002) \\ 
+  & & \\ 
+ PreOp\_Q\_Symptom\_Period\_4 &  &  \\ 
+  &  &  \\ 
+  & & \\ 
+ Year\_2014 & 0.336^{***} & 0.048 \\ 
+  & (0.030) & (0.036) \\ 
+  & & \\ 
+ Year\_2015 & 0.339^{***} & 0.050 \\ 
+  & (0.030) & (0.036) \\ 
+  & & \\ 
+ Year\_2016 & 0.341^{***} & 0.052 \\ 
+  & (0.030) & (0.036) \\ 
+  & & \\ 
+ Knee\_Replacement\_Participation\_Rate & 0.0001^{***} & 0.0001 \\ 
+  & (0.00004) & (0.00004) \\ 
+  & & \\ 
+ Knee\_Replacement\_Linkage\_Rate & -0.001^{***} & -0.0004^{**} \\ 
+  & (0.0001) & (0.0002) \\ 
+  & & \\ 
+ Knee\_Replacement\_Issue\_Rate & 0.002^{***} & 0.0004 \\ 
+  & (0.0002) & (0.0003) \\ 
+  & & \\ 
+ Knee\_Replacement\_Response\_Rate & 0.003^{***} & 0.0004 \\ 
+  & (0.0002) & (0.0002) \\ 
+  & & \\ 
+ Gender\_1 & 0.005^{***} & 0.005^{***} \\ 
+  & (0.001) & (0.001) \\ 
+  & & \\ 
+ Constant & 0.313^{***} &  \\ 
+  & (0.040) &  \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & \multicolumn{1}{c}{146,329} & \multicolumn{1}{c}{146,329} \\ 
+R$^{2}$ & \multicolumn{1}{c}{0.533} & \multicolumn{1}{c}{0.533} \\ 
+Adjusted R$^{2}$ & \multicolumn{1}{c}{0.533} & \multicolumn{1}{c}{0.532} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table}
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

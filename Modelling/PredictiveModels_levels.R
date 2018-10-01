@@ -165,21 +165,13 @@ print(groin_test_AdjR2)
 ### Now with extensive hyperparameter optimisation ###
 
 ### Set up cross validation 
-xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 800),
-                           eta = c(0.05, 0.1, 0.3, 0.5),
+xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 600, 1000),
+                           eta = c(0.05, 0.1, 0.3),
                            gamma = 1,
                            subsample = c(0.5, 1), 
                            colsample_bytree = c(0.5, 1),
                            max_depth = c(3, 6, 12),
                            min_child_weight = c(1, 4))
-
-xgboostGrid <- expand.grid(nrounds = c(50, 150, 300),
-                           eta = c(0.1, 0.3),
-                           gamma = 1,
-                           subsample = 0.5,
-                           colsample_bytree = 0.5,
-                           max_depth = 6,
-                           min_child_weight = 1)
 
 xgboostControl = trainControl(method = "repeatedcv",
                               number = 10,

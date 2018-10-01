@@ -247,5 +247,33 @@ summary(hip_fe_prpa_regression)
 
 ############ Presentation of Results ##############
 
+### Tables
+stargazer(knee_regression, knee_fe_pr_regression, knee_fe_pa_regression, knee_fe_prpa_regression,
+          title="Knee Replacement PostOp EQ5D - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+stargazer(hip_regression, hip_fe_pr_regression, hip_fe_pa_regression, hip_fe_prpa_regression,
+          title="Hip Replacement PostOp EQ5D Difference - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+stargazer(groin_regression, groin_fe_pr_regression, groin_fe_pa_regression, groin_fe_prpa_regression,
+          title="Groin Hernia PostOp EQ5D Difference - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+### Plots 
+Models = c("Regression", "Regression w/ Provider FE", 
+           "Regression w/ Patient FE", 
+           "Regression w/ Patient & Provider FE")
+
+Knee_AdjR2s = c(results_knee_regression$adj.r.squared, results_knee_fe_pr_regression$adj.r.squared,
+                results_knee_fe_pa_regression$adj.r.squared2, results_knee_fe_prpa_regression$adj.r.squared)
+
+Hip_AdjR2s = c(results_hip_regression$adj.r.squared, results_hip_fe_pr_regression$adj.r.squared,
+               results_hip_fe_pa_regression$adj.r.squared2, results_hip_fe_prpa_regression$adj.r.squared)
+
+Groin_AdjR2s = c(results_groin_regression$adj.r.squared, results_groin_fe_pr_regression$adj.r.squared,
+                 results_groin_fe_pa_regression$adj.r.squared2, results_groin_fe_prpa_regression$adj.r.squared)
+
+AdjR2_matrix = cbind(Models, Knee_AdjR2s, Hip_AdjR2s, Groin_AdjR2s) 
 
 

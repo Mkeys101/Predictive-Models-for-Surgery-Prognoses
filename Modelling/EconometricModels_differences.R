@@ -47,7 +47,7 @@ groin_regression = lm(EQ5D_Index_Diff ~ PreOp_Q_Activity + PreOp_Q_Anxiety +
                       PreOp_Q_Symptom_Period_1 + PreOp_Q_Symptom_Period_2, 
                       data = groin_wide)
 
-summary(groin_regression)
+results_groin_regression = summary(groin_regression)
 
 ### Knee Replacement Surgery  
 knee_regression = lm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -63,7 +63,7 @@ knee_regression = lm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + PreOp_Q_
                      Gender_1,
                      data = knee_wide)
 
-summary(knee_regression)
+results_knee_regression = summary(knee_regression)
 
 ### Hip Replacement Surgery 
 hip_regression = lm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -80,7 +80,7 @@ hip_regression = lm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + PreOp_Q_Ac
                     Gender_1,
                     data = hip_wider)
 
-summary(hip_regression)
+results_hip_regression = summary(hip_regression)
 
 ####### Regressions with patient fixed effects only ########
 
@@ -96,7 +96,7 @@ groin_fe_pa_regression = plm(EQ5D_Index_Diff ~ PreOp_Q_Activity + PreOp_Q_Anxiet
                              index=c('Patient_ID'), 
                              model="within")
 
-summary(groin_fe_pa_regression)
+results_groin_fe_pa_regression = summary(groin_fe_pa_regression)
 
 ### Knee Replacement Surgery  
 knee_fe_pa_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -114,7 +114,7 @@ knee_fe_pa_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + P
                               index=c('Patient_ID'), 
                               model="within")
 
-summary(knee_fe_pa_regression)
+results_knee_fe_pa_regression = summary(knee_fe_pa_regression)
 
 ### Hip Replacement Surgery 
 hip_fe_pa_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -133,7 +133,7 @@ hip_fe_pa_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + Pre
                            index=c('Patient_ID'), 
                            model="within")
 
-summary(hip_fe_pa_regression)
+results_hip_fe_pa_regression = summary(hip_fe_pa_regression)
 
 ####### Regressions with provider fixed effects only ########
 
@@ -149,7 +149,7 @@ groin_fe_pr_regression = plm(EQ5D_Index_Diff ~ PreOp_Q_Activity + PreOp_Q_Anxiet
                              index=c('Provider_Code'), 
                              model="within")
 
-summary(groin_fe_pr_regression)
+results_groin_fe_pr_regression = summary(groin_fe_pr_regression)
 
 ### Knee Replacement Surgery  
 knee_fe_pr_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -167,7 +167,7 @@ knee_fe_pr_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + P
                             index=c('Provider_Code'), 
                             model="within")
 
-summary(knee_fe_pr_regression)
+resuls_knee_fe_pr_regression = summary(knee_fe_pr_regression)
 
 ### Hip Replacement Surgery 
 hip_fe_pr_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -186,7 +186,7 @@ hip_fe_pr_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + Pre
                            index=c('Provider_Code'), 
                            model="within")
 
-summary(hip_fe_pr_regression)
+results_hip_fe_pr_regression = summary(hip_fe_pr_regression)
 
 
 ####### Regressions with both patient and provider fixed effects ########
@@ -203,7 +203,7 @@ groin_fe_prpa_regression = plm(EQ5D_Index_Diff ~ PreOp_Q_Activity + PreOp_Q_Anxi
                                index=c('Provider_Code','Patient_ID'), 
                                model="within")
 
-summary(groin_fe_prpa_regression)
+results_groin_fe_prpa_regression = summary(groin_fe_prpa_regression)
 
 ### Knee Replacement Surgery  
 knee_fe_prpa_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -221,7 +221,7 @@ knee_fe_prpa_regression = plm(EQ5D_Index_Diff ~ Knee_Replacement_PreOp_Q_Score +
                               index=c('Provider_Code','Patient_ID'), 
                               model="within")
 
-summary(knee_fe_prpa_regression)
+results_knee_fe_prpa_regression = summary(knee_fe_prpa_regression)
 
 ### Hip Replacement Surgery 
 hip_fe_prpa_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + PreOp_Q_Activity + PreOp_Q_Anxiety + 
@@ -240,12 +240,41 @@ hip_fe_prpa_regression = plm(EQ5D_Index_Diff ~ Hip_Replacement_PreOp_Q_Score + P
                              index=c('Provider_Code','Patient_ID'), 
                              model="within")
 
-summary(hip_fe_prpa_regression)
+results_hip_fe_prpa_regression = summary(hip_fe_prpa_regression)
 
 ###### Regressions with unique individual input coefficients (Random effects model?) #######
 
-
 ############ Presentation of Results ##############
+
+### Tables 
+stargazer(knee_regression, knee_fe_pr_regression, knee_fe_pa_regression, knee_fe_prpa_regression,
+          title="Knee Replacement EQ5D Difference - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+stargazer(hip_regression, hip_fe_pr_regression, hip_fe_pa_regression, hip_fe_prpa_regression,
+          title="Hip Replacement EQ5D Difference - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+stargazer(groin_regression, groin_fe_pr_regression, groin_fe_pa_regression, groin_fe_prpa_regression,
+          title="Groin Hernia EQ5D Difference - Variance Explaining Exercises", align=TRUE,
+          keep.stat = c('n', 'adj.rsq', 'rsq', 'ser'))
+
+## Plots 
+Models = c("Regression", "Regression w/ Provider FE", 
+           "Regression w/ Patient FE", 
+           "Regression w/ Patient & Provider FE")
+
+Knee_AdjR2s = c(results_knee_regression$adj.r.squared, results_knee_fe_pr_regression$adj.r.squared,
+                results_knee_fe_pa_regression$adj.r.squared2, results_knee_fe_prpa_regression$adj.r.squared)
+
+Hip_AdjR2s = c(results_hip_regression$adj.r.squared, results_hip_fe_pr_regression$adj.r.squared,
+                results_hip_fe_pa_regression$adj.r.squared2, results_hip_fe_prpa_regression$adj.r.squared)
+
+Groin_AdjR2s = c(results_groin_regression$adj.r.squared, results_groin_fe_pr_regression$adj.r.squared,
+                results_groin_fe_pa_regression$adj.r.squared2, results_groin_fe_prpa_regression$adj.r.squared)
+
+AdjR2_matrix = cbind(Models, Knee_AdjR2s, Hip_AdjR2s, Groin_AdjR2s) 
+
 
 
 
