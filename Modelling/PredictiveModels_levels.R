@@ -164,7 +164,7 @@ print(groin_test_AdjR2)
 
 ### Now with extensive hyperparameter optimisation ###
 
-# Set up cross validation 
+### Set up cross validation 
 xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 800),
                            eta = c(0.05, 0.1, 0.3, 0.5),
                            gamma = 1,
@@ -181,13 +181,12 @@ xgboostGrid <- expand.grid(nrounds = c(50, 150, 300),
                            max_depth = 6,
                            min_child_weight = 1)
 
-
 xgboostControl = trainControl(method = "repeatedcv",
                               number = 10,
                               repeats = 5,
                               search = "grid")
 
-# Knee 
+### Knee 
 xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
                       data = kneeTrain,
                       method = "xgbTree",
@@ -196,10 +195,19 @@ xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
                       verbose = TRUE,
                       metric = 'Rsquared')
 
+# Model Results 
 print(xgboost_knee)
 summary(xgboost_knee)
 
-# Hip 
+# Validation 
+knee_predict = predict(xgboost_knee, kneeTest_data)
+knee_R2 = R2(knee_predict, kneeTest_labels)
+knee_AdjR2 = AdjR2(knee_R2, ncol(kneeTest_data), nrow(kneeTest_data))
+
+cat('The adjusted R^2 error of the knee model on the test data is ', knee_AdjR2,'\n')
+cat('The optimal hyperparameters found for the knee model are', knee_optimal_hp,'\n')
+
+### Hip 
 xgboost_hip <- train(PostOp_Q_EQ5D_Index ~ .,
                       data = hipTrain,
                       method = "xgbTree",
@@ -210,6 +218,18 @@ xgboost_hip <- train(PostOp_Q_EQ5D_Index ~ .,
 
 print(xgboost_hip)
 summary(xgboost_hip)
+
+# Model Results 
+print(xgboost_hip)
+summary(xgboost_hip)
+
+# Validation 
+hip_predict = predict(xgboost_hip, hipTest_data)
+hip_R2 = R2(hip_predict, hipTest_labels)
+hip_AdjR2 = AdjR2(hip_R2, ncol(hipTest_data), nrow(hipTest_data))
+
+cat('The adjusted R^2 error of the hip model on the test data is ', hip_AdjR2,'\n')
+cat('The optimal hyperparameters found for the hip model are', hip_optimal_hp,'\n')
 
 # Groin
 xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
@@ -222,6 +242,18 @@ xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
 
 print(xgboost_groin)
 summary(xgboost_groin)
+
+# Model Results 
+print(xgboost_groin)
+summary(xgboost_groin)
+
+# Validation 
+groin_predict = predict(xgboost_hip, hipTest_data)
+groin_R2 = R2(hip_predict, hipTest_labels)
+groin_AdjR2 = AdjR2(hip_R2, ncol(hipTest_data), nrow(hipTest_data))
+
+cat('The adjusted R^2 error of the groin model on the test data is ', groin_AdjR2,'\n')
+cat('The optimal hyperparameters found for the groin model are ', groin_optimal_hp,'\n')
 
 ############### Formatting Results ###############
 
