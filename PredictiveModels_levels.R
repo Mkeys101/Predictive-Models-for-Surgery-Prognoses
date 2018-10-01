@@ -38,7 +38,7 @@ hip_wider$Year_diff = hip_wider$Year - 2009
 groin_wider$Year_diff = groin_wider$Year - 2009 
 
 # Drop Irrelevant variables for prediction (fixed effects, time indicators or alternative measures of output e.g. Post-Op Score)
-knee_pwr <- knee_wider[ , !(names(knee_wider) %in% c("PostOp_Q_EQ5D_Index", "PreOp_Q_EQ5D_Index_Profile",
+knee_pwr <- knee_wider[ , !(names(knee_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
                                                  "Provider_Code", "Knee_Replacement_PostOp_Q_Score",
                                                  "Year", "Year_2014", "Year_2015", "Year_2016",
                                                  "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
@@ -46,7 +46,7 @@ knee_pwr <- knee_wider[ , !(names(knee_wider) %in% c("PostOp_Q_EQ5D_Index", "Pre
                                                  "Knee_Replacement_Participation_Rate", "Knee_Replacement_Linkage_Rate",
                                                  "Knee_Replacement_Issue_Rate", "Knee_Replacement_Response_Rate"))]
 
-groin_pwr <- groin_wider[ , !(names(groin_wider) %in% c("PostOp_Q_EQ5D_Index", "PreOp_Q_EQ5D_Index_Profile",
+groin_pwr <- groin_wider[ , !(names(groin_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
                                                     "Provider_Code", "Groin_Hernia_PostOp_Q_Score",
                                                     "Year", "Year_2014", "Year_2015", "Year_2016",
                                                     "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
@@ -54,7 +54,7 @@ groin_pwr <- groin_wider[ , !(names(groin_wider) %in% c("PostOp_Q_EQ5D_Index", "
                                                     "Groin_Hernia_Participation_Rate", "Groin_Hernia_Linkage_Rate",
                                                     "Groin_Hernia_Issue_Rate", "Groin_Hernia_Response_Rate"))]
                       
-hip_pwr <- hip_wider[ , !(names(hip_wider) %in% c("PostOp_Q_EQ5D_Index", "PreOp_Q_EQ5D_Index_Profile", 
+hip_pwr <- hip_wider[ , !(names(hip_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile", 
                                               "Provider_Code", "Hip_Replacement_PostOp_Q_Score",
                                               "Year", "Year_2014", "Year_2015", "Year_2016",
                                               "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
@@ -69,9 +69,9 @@ hip_pwr <- hip_wider[ , !(names(hip_wider) %in% c("PostOp_Q_EQ5D_Index", "PreOp_
 
 ### Test-Train Split
 # Get training indexes (75% training, 25% testing)
-kneeTrainIndex <- createDataPartition(knee_pwr$EQ5D_Index_Diff, p=0.75, list=FALSE)
-hipTrainIndex <- createDataPartition(hip_pwr$EQ5D_Index_Diff, p=0.75, list=FALSE)
-groinTrainIndex <- createDataPartition(groin_pwr$EQ5D_Index_Diff, p=0.75, list=FALSE)
+kneeTrainIndex <- createDataPartition(knee_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
+hipTrainIndex <- createDataPartition(hip_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
+groinTrainIndex <- createDataPartition(groin_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
 
 # Formumlate training and test sets 
 kneeTrain = knee_pwr[kneeTrainIndex, ] 
@@ -84,26 +84,25 @@ groinTest = groin_pwr[-groinTrainIndex, ]
 
 ## Seperate inputs and labels & convert to matrices 
 # Knee
-kneeTrain_data = data.matrix(subset(kneeTrain, select = -c(EQ5D_Index_Diff)))
-kneeTrain_labels = data.matrix(kneeTrain["EQ5D_Index_Diff"])
+kneeTrain_data = data.matrix(subset(kneeTrain, select = -c(PostOp_Q_EQ5D_Index)))
+kneeTrain_labels = data.matrix(kneeTrain["PostOp_Q_EQ5D_Index"])
 
-kneeTest_data = data.matrix(subset(kneeTest, select = -c(EQ5D_Index_Diff)))
-kneeTest_labels = data.matrix(kneeTest["EQ5D_Index_Diff"])
+kneeTest_data = data.matrix(subset(kneeTest, select = -c(PostOp_Q_EQ5D_Index)))
+kneeTest_labels = data.matrix(kneeTest["PostOp_Q_EQ5D_Index"])
 
 # Hip
-hipTrain_data = data.matrix(subset(hipTrain, select = -c(EQ5D_Index_Diff)))
-hipTrain_labels = data.matrix(hipTrain["EQ5D_Index_Diff"])
+hipTrain_data = data.matrix(subset(hipTrain, select = -c(PostOp_Q_EQ5D_Index)))
+hipTrain_labels = data.matrix(hipTrain["PostOp_Q_EQ5D_Index"])
 
-hipTest_data = data.matrix(subset(hipTest, select = -c(EQ5D_Index_Diff)))
-hipTest_labels = data.matrix(hipTest["EQ5D_Index_Diff"])
+hipTest_data = data.matrix(subset(hipTest, select = -c(PostOp_Q_EQ5D_Index)))
+hipTest_labels = data.matrix(hipTest["PostOp_Q_EQ5D_Index"])
 
 # Groin
-groinTrain_data = data.matrix(subset(groinTrain, select = -c(EQ5D_Index_Diff)))
-groinTrain_labels = data.matrix(groinTrain["EQ5D_Index_Diff"])
+groinTrain_data = data.matrix(subset(groinTrain, select = -c(PostOp_Q_EQ5D_Index)))
+groinTrain_labels = data.matrix(groinTrain["PostOp_Q_EQ5D_Index"])
 
-groinTest_data = data.matrix(subset(groinTest, select = -c(EQ5D_Index_Diff)))
-groinTest_labels = data.matrix(groinTest["EQ5D_Index_Diff"])
-
+groinTest_data = data.matrix(subset(groinTest, select = -c(PostOp_Q_EQ5D_Index)))
+groinTest_labels = data.matrix(groinTest["PostOp_Q_EQ5D_Index"])
 
 ### Set up Evaluation functions 
 R2 <- function(y_pred, y_actual) {
@@ -135,10 +134,10 @@ knee_dtest <- xgb.DMatrix(data = kneeTest_data , label = kneeTest_labels)
 hip_dtest <- xgb.DMatrix(data = hipTest_data , label = hipTest_labels)
 groin_dtest <- xgb.DMatrix(data = groinTest_data , label = groinTest_labels)
 
-##### First runs (with differences) #####
-xgb_knee <- xgboost(data = knee_dtrain, nrounds=5)
-xgb_hip <- xgboost(data = hip_dtrain, nrounds=5)
-xgb_groin <- xgboost(data = groin_dtrain, nrounds=5)
+##### First runs (Postop level outcome) #####
+xgb_knee <- xgboost(data = knee_dtrain, nrounds=50)
+xgb_hip <- xgboost(data = hip_dtrain, nrounds=100)
+xgb_groin <- xgboost(data = groin_dtrain, nrounds=100)
 
 knee_pred <- predict(xgb_knee, knee_dtest)
 hip_pred <- predict(xgb_hip, hip_dtest)
@@ -163,31 +162,33 @@ groin_test_AdjR2 = AdjR2(groin_test_R2, ncol(groinTest_data), nrow(groinTest_dat
 print(groin_test_R2)
 print(groin_test_AdjR2)
 
-### First runs (without differences) ### 
-
-
-
-
 ### Now with extensive hyperparameter optimisation ###
 
 # Set up cross validation 
-xgboostGrid <- expand.grid(nrounds = 3,
-                           eta = c(0.5,1,1.5),
+xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 800),
+                           eta = c(0.05, 0.1, 0.3, 0.5),
                            gamma = 1,
-                           colsample_bytree = c(1.0, 0.5),
-                           max_depth = c(3,6,12),
-                           min_child_weight = c(1,4),
-                           subsample = 1)
+                           subsample = c(0.5, 1), 
+                           colsample_bytree = c(0.5, 1),
+                           max_depth = c(3, 6, 12),
+                           min_child_weight = c(1, 4))
+
+xgboostGrid <- expand.grid(nrounds = c(50, 150, 300),
+                           eta = c(0.1, 0.3),
+                           gamma = 1,
+                           subsample = 0.5,
+                           colsample_bytree = 0.5,
+                           max_depth = 6,
+                           min_child_weight = 1)
+
 
 xgboostControl = trainControl(method = "repeatedcv",
                               number = 10,
                               repeats = 5,
-                              classProbs = TRUE,
-                              search = "grid",
-                              allowParallel = TRUE)
+                              search = "grid")
 
 # Knee 
-xgboost_knee <- train(EQ5D_Index_Diff ~ .,
+xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
                       data = kneeTrain,
                       method = "xgbTree",
                       trControl = xgboostControl,
@@ -198,28 +199,30 @@ xgboost_knee <- train(EQ5D_Index_Diff ~ .,
 print(xgboost_knee)
 summary(xgboost_knee)
 
-# Knee 
-xgboost_knee <- train(EQ5D_Index_Diff ~ .,
-                      data = kneeTrain,
+# Hip 
+xgboost_hip <- train(PostOp_Q_EQ5D_Index ~ .,
+                      data = hipTrain,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
                       metric = 'Rsquared')
 
-print(xgboost_knee)
-summary(xgboost_knee)
+print(xgboost_hip)
+summary(xgboost_hip)
 
-# Knee 
-xgboost_knee <- train(EQ5D_Index_Diff ~ .,
-                      data = kneeTrain,
+# Groin
+xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
+                      data = groinTrain,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
                       metric = 'Rsquared')
 
-print(xgboost_knee)
-summary(xgboost_knee)
+print(xgboost_groin)
+summary(xgboost_groin)
+
+############### Formatting Results ###############
 
 

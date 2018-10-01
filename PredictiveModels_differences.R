@@ -163,28 +163,30 @@ groin_test_AdjR2 = AdjR2(groin_test_R2, ncol(groinTest_data), nrow(groinTest_dat
 print(groin_test_R2)
 print(groin_test_AdjR2)
 
-### First runs (without differences) ### 
-
-
-
-
 ### Now with extensive hyperparameter optimisation ###
 
 # Set up cross validation 
-xgboostGrid <- expand.grid(nrounds = 3,
-                           eta = c(0.5,1,1.5),
+xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 800),
+                           eta = c(0.05, 0.1, 0.3, 0.5),
                            gamma = 1,
-                           colsample_bytree = c(1.0, 0.5),
-                           max_depth = c(3,6,12),
-                           min_child_weight = c(1,4),
-                           subsample = 1)
+                           subsample = c(0.5, 1), 
+                           colsample_bytree = c(0.5, 1),
+                           max_depth = c(3, 6, 12),
+                           min_child_weight = c(1, 4))
+
+xgboostGrid <- expand.grid(nrounds = c(50, 150, 300),
+                           eta = c(0.1, 0.3),
+                           gamma = 1,
+                           subsample = 0.5,
+                           colsample_bytree = 0.5,
+                           max_depth = 6,
+                           min_child_weight = 1)
+
 
 xgboostControl = trainControl(method = "repeatedcv",
                               number = 10,
                               repeats = 5,
-                              classProbs = TRUE,
-                              search = "grid",
-                              allowParallel = TRUE)
+                              search = "grid")
 
 # Knee 
 xgboost_knee <- train(EQ5D_Index_Diff ~ .,
@@ -198,28 +200,29 @@ xgboost_knee <- train(EQ5D_Index_Diff ~ .,
 print(xgboost_knee)
 summary(xgboost_knee)
 
-# Knee 
+# Hip 
+xgboost_hip <- train(EQ5D_Index_Diff ~ .,
+                     data = hipTrain,
+                     method = "xgbTree",
+                     trControl = xgboostControl,
+                     tuneGrid = xgboostGrid,
+                     verbose = TRUE,
+                     metric = 'Rsquared')
+
+print(xgboost_hip)
+summary(xgboost_hip)
+
+# Groin
 xgboost_knee <- train(EQ5D_Index_Diff ~ .,
-                      data = kneeTrain,
+                      data = groinTrain,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
                       metric = 'Rsquared')
 
-print(xgboost_knee)
-summary(xgboost_knee)
+print(xgboost_groin)
+summary(xgboost_groin)
 
-# Knee 
-xgboost_knee <- train(EQ5D_Index_Diff ~ .,
-                      data = kneeTrain,
-                      method = "xgbTree",
-                      trControl = xgboostControl,
-                      tuneGrid = xgboostGrid,
-                      verbose = TRUE,
-                      metric = 'Rsquared')
-
-print(xgboost_knee)
-summary(xgboost_knee)
-
+############### Formatting Results ###############
 

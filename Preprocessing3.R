@@ -87,9 +87,9 @@ groin_wider_wd = fastDummies::dummy_cols(wider_groin_data,
                                             select_columns = cat_columns) 
 
 # Remove the initial categorical columns 
-knee_wider_wd = knee_wider_wd[ , !(names(knee_wider_wd) %in% cat_columns)]
-hip_wider_wd = hip_wider_wd[ , !(names(hip_wider_wd) %in% cat_columns)]
-groin_wider_wd = groin_wider_wd[ , !(names(groin_wider_wd) %in% cat_columns)]
+knee_wider_wd = knee_wider_wd[ , !(names(knee_wider_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
+hip_wider_wd = hip_wider_wd[ , !(names(hip_wider_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
+groin_wider_wd = groin_wider_wd[ , !(names(groin_wider_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
 
 # Drop the columns for the first dummy (=0) 
 indicators_0_groin = names(groin_wider_wd)[grepl(paste(c("_0", "40 to 49", "_2013"), collapse = "|"), names(groin_wider_wd))]
@@ -178,9 +178,9 @@ groin_wide_wd = fastDummies::dummy_cols(wide_groin_data,
                                    select_columns = cat_columns) 
 
 # Remove the initial categorical columns 
-knee_wide_wd = knee_wide_wd[ , !(names(knee_wide_wd) %in% cat_columns)]
-hip_wide_wd = hip_wide_wd[ , !(names(hip_wide_wd) %in% cat_columns)]
-groin_wide_wd = groin_wide_wd[ , !(names(groin_wide_wd) %in% cat_columns)]
+knee_wide_wd = knee_wide_wd[ , !(names(knee_wide_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
+hip_wide_wd = hip_wide_wd[ , !(names(hip_wide_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
+groin_wide_wd = groin_wide_wd[ , !(names(groin_wide_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
 
 # Drop the columns for the first dummy (=0) 
 indicators_0_groin = names(groin_wide_wd)[grepl(paste(c("_0", "40 to 49", "_2013"), collapse = "|"), names(groin_wide_wd))]
@@ -249,9 +249,9 @@ groin_reduced_wd = fastDummies::dummy_cols(reduced_groin_data,
                                         select_columns = cat_columns) 
 
 # Remove the initial categorical columns 
-knee_reduced_wd = knee_reduced_wd[ , !(names(knee_reduced_wd) %in% cat_columns)]
-hip_reduced_wd = hip_reduced_wd[ , !(names(hip_reduced_wd) %in% cat_columns)]
-groin_reduced_wd = groin_reduced_wd[ , !(names(groin_reduced_wd) %in% cat_columns)]
+knee_reduced_wd = knee_reduced_wd[ , !(names(knee_reduced_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)]s)]
+hip_reduced_wd = hip_reduced_wd[ , !(names(hip_reduced_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
+groin_reduced_wd = groin_reduced_wd[ , !(names(groin_reduced_wd) %in% cat_columns[-c(length(cat_columns),length(cat_columns)-1)])]
 
 # Drop the columns for the first dummy (=0) 
 indicators_0_groin = names(groin_reduced_wd)[grepl(paste(c("_0", "40 to 49", "_2013"), collapse = "|"), names(groin_reduced_wd))]
