@@ -1,6 +1,6 @@
-###########################################################
-############### Predictive Models (Levels) ################
-###########################################################
+###################################################################
+############### Predictive Models (Classification) ################
+#################################################################
 
 rm(list = ls())
 
@@ -37,41 +37,51 @@ knee_wider$Year_diff = knee_wider$Year - 2009
 hip_wider$Year_diff = hip_wider$Year - 2009 
 groin_wider$Year_diff = groin_wider$Year - 2009 
 
-# Drop Irrelevant variables for prediction (fixed effects, time indicators or alternative measures of output e.g. Post-Op Score)
-knee_pwr <- knee_wider[ , !(names(knee_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
-                                                 "Provider_Code", "Knee_Replacement_PostOp_Q_Score",
-                                                 "Year", "Year_2014", "Year_2015", "Year_2016",
-                                                 "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
-                                                 "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
-                                                 "Knee_Replacement_Participation_Rate", "Knee_Replacement_Linkage_Rate",
-                                                 "Knee_Replacement_Issue_Rate", "Knee_Replacement_Response_Rate"))]
+# Make EQ5D_Index Diff Discrete 
+knee_wider$EQ5D_Change_Discrete = cut(knee_wider$EQ5D_Index_Diff,
+                                      breaks = c(-Inf, -0.1, 0.1, Inf),
+                                      labels = c("Deterioration", "Minimal/No Change", "Improvement"))
 
-groin_pwr <- groin_wider[ , !(names(groin_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
-                                                    "Provider_Code", "Groin_Hernia_PostOp_Q_Score",
-                                                    "Year", "Year_2014", "Year_2015", "Year_2016",
-                                                    "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
-                                                    "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
-                                                    "Groin_Hernia_Participation_Rate", "Groin_Hernia_Linkage_Rate",
-                                                    "Groin_Hernia_Issue_Rate", "Groin_Hernia_Response_Rate"))]
-                      
-hip_pwr <- hip_wider[ , !(names(hip_wider) %in% c("EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile", 
-                                              "Provider_Code", "Hip_Replacement_PostOp_Q_Score",
-                                              "Year", "Year_2014", "Year_2015", "Year_2016",
-                                              "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
-                                              "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
-                                              "Hip_Replacement_Participation_Rate", "Hip_Replacement_Linkage_Rate",
-                                              "Hip_Replacement_Issue_Rate", "Hip_Replacement_Response_Rate"))]
+hip_wider$EQ5D_Change_Discrete = cut(hip_wider$EQ5D_Index_Diff,
+                                      breaks = c(-Inf, -0.1, 0.1, Inf),
+                                      labels = c("Deterioration", "Minimal/No Change", "Improvement"))
+
+groin_wider$EQ5D_Change_Discrete = cut(groin_wider$EQ5D_Index_Diff,
+                                      breaks = c(-Inf, -0.1, 0.1, Inf),
+                                      labels = c("Deterioration", "Minimal/No Change", "Improvement"))
+
+# Drop Irrelevant variables for prediction (fixed effects, time indicators or alternative measures of output e.g. Post-Op Score)
+knee_pwr <- knee_wider[ , !(names(knee_wider) %in% c("PostOp_Q_EQ5D_Index", "EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
+                                                     "Provider_Code", "Knee_Replacement_PostOp_Q_Score",
+                                                     "Year", "Year_2014", "Year_2015", "Year_2016",
+                                                     "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
+                                                     "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
+                                                     "Knee_Replacement_Participation_Rate", "Knee_Replacement_Linkage_Rate",
+                                                     "Knee_Replacement_Issue_Rate", "Knee_Replacement_Response_Rate"))]
+
+groin_pwr <- groin_wider[ , !(names(groin_wider) %in% c("PostOp_Q_EQ5D_Index", "EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile",
+                                                        "Provider_Code", "Groin_Hernia_PostOp_Q_Score",
+                                                        "Year", "Year_2014", "Year_2015", "Year_2016",
+                                                        "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
+                                                        "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
+                                                        "Groin_Hernia_Participation_Rate", "Groin_Hernia_Linkage_Rate",
+                                                        "Groin_Hernia_Issue_Rate", "Groin_Hernia_Response_Rate"))]
+
+hip_pwr <- hip_wider[ , !(names(hip_wider) %in% c("PostOp_Q_EQ5D_Index", "EQ5D_Index_Diff", "PreOp_Q_EQ5D_Index_Profile", 
+                                                  "Provider_Code", "Hip_Replacement_PostOp_Q_Score",
+                                                  "Year", "Year_2014", "Year_2015", "Year_2016",
+                                                  "Patient_ID", "PreOp_Q_Symptom_Period_1", "PreOp_Q_Symptom_Period_2",
+                                                  "PreOp_Q_Symptom_Period_3", "PreOp_Q_Symptom_Period_4",
+                                                  "Hip_Replacement_Participation_Rate", "Hip_Replacement_Linkage_Rate",
+                                                  "Hip_Replacement_Issue_Rate", "Hip_Replacement_Response_Rate"))]
 
 #### Feature Engineering
 
-
-# PCA 
-
 #### Test-Train Split
 # Get training indexes (75% training, 25% testing)
-kneeTrainIndex <- createDataPartition(knee_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
-hipTrainIndex <- createDataPartition(hip_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
-groinTrainIndex <- createDataPartition(groin_pwr$PostOp_Q_EQ5D_Index, p=0.75, list=FALSE)
+kneeTrainIndex <- createDataPartition(knee_pwr$EQ5D_Change_Discrete, p=0.75, list=FALSE)
+hipTrainIndex <- createDataPartition(hip_pwr$EQ5D_Change_Discrete, p=0.75, list=FALSE)
+groinTrainIndex <- createDataPartition(groin_pwr$EQ5D_Change_Discrete, p=0.75, list=FALSE)
 
 # Formumlate training and test sets 
 kneeTrain = knee_pwr[kneeTrainIndex, ] 
@@ -84,25 +94,25 @@ groinTest = groin_pwr[-groinTrainIndex, ]
 
 ## Seperate inputs and labels & convert to matrices 
 # Knee
-kneeTrain_data = data.matrix(subset(kneeTrain, select = -c(PostOp_Q_EQ5D_Index)))
-kneeTrain_labels = data.matrix(kneeTrain["PostOp_Q_EQ5D_Index"])
+kneeTrain_data = data.matrix(subset(kneeTrain, select = -c(EQ5D_Change_Discrete)))
+kneeTrain_labels = data.matrix(kneeTrain["EQ5D_Change_Discrete"])
 
-kneeTest_data = data.matrix(subset(kneeTest, select = -c(PostOp_Q_EQ5D_Index)))
-kneeTest_labels = data.matrix(kneeTest["PostOp_Q_EQ5D_Index"])
+kneeTest_data = data.matrix(subset(kneeTest, select = -c(EQ5D_Change_Discrete)))
+kneeTest_labels = data.matrix(kneeTest["EQ5D_Change_Discrete"])
 
 # Hip
-hipTrain_data = data.matrix(subset(hipTrain, select = -c(PostOp_Q_EQ5D_Index)))
-hipTrain_labels = data.matrix(hipTrain["PostOp_Q_EQ5D_Index"])
+hipTrain_data = data.matrix(subset(hipTrain, select = -c(EQ5D_Change_Discrete)))
+hipTrain_labels = data.matrix(hipTrain["EQ5D_Change_Discrete"])
 
-hipTest_data = data.matrix(subset(hipTest, select = -c(PostOp_Q_EQ5D_Index)))
-hipTest_labels = data.matrix(hipTest["PostOp_Q_EQ5D_Index"])
+hipTest_data = data.matrix(subset(hipTest, select = -c(EQ5D_Change_Discrete)))
+hipTest_labels = data.matrix(hipTest["EQ5D_Change_Discrete"])
 
 # Groin
-groinTrain_data = data.matrix(subset(groinTrain, select = -c(PostOp_Q_EQ5D_Index)))
-groinTrain_labels = data.matrix(groinTrain["PostOp_Q_EQ5D_Index"])
+groinTrain_data = data.matrix(subset(groinTrain, select = -c(EQ5D_Change_Discrete)))
+groinTrain_labels = data.matrix(groinTrain["EQ5D_Change_Discrete"])
 
-groinTest_data = data.matrix(subset(groinTest, select = -c(PostOp_Q_EQ5D_Index)))
-groinTest_labels = data.matrix(groinTest["PostOp_Q_EQ5D_Index"])
+groinTest_data = data.matrix(subset(groinTest, select = -c(EQ5D_Change_Discrete)))
+groinTest_labels = data.matrix(groinTest["EQ5D_Change_Discrete"])
 
 ### Set up Evaluation functions 
 R2 <- function(y_pred, y_actual) {
@@ -150,12 +160,17 @@ knee_test_AdjR2 = AdjR2(knee_test_R2, ncol(kneeTest_data), nrow(kneeTest_data))
 print(knee_test_R2)
 print(knee_test_AdjR2)
 
+confusionMatrix(factor(knee_pred), )
+
+
+# Hip Results 
 hip_test_R2 = R2(hip_pred, hipTest_labels)
 hip_test_AdjR2 = AdjR2(hip_test_R2, ncol(hipTest_data), nrow(hipTest_data))
 
 print(hip_test_R2)
 print(hip_test_AdjR2)
 
+# Groin Results 
 groin_test_R2 = R2(groin_pred, groinTest_labels)
 groin_test_AdjR2 = AdjR2(groin_test_R2, ncol(groinTest_data), nrow(groinTest_data))
 
@@ -164,21 +179,18 @@ print(groin_test_AdjR2)
 
 ### Now with extensive hyperparameter optimisation ###
 
-# Set up grid to search 
-xgboostGrid <- expand.grid(nrounds = c(50, 100, 200, 800),
+### Set up cross validation 
+xgboostGrid <- expand.grid(nrounds = c(50, 70, 100, 150, 300, 600, 1000),
                            eta = c(0.05, 0.1, 0.3),
-                           gamma = c(0, 0.5, 1)
+                           gamma = 1,
                            subsample = c(0.5, 1), 
                            colsample_bytree = c(0.5, 1),
                            max_depth = c(3, 6, 12),
-                           min_child_weight = c(1, 3),
-                           lambda = c(1, 4), 
-                           alpha = c(0, 1))
+                           min_child_weight = c(1, 4))
 
-# Set up cross validation within the training set. 10 folds, 4 repeats. 
 xgboostControl = trainControl(method = "repeatedcv",
                               number = 10,
-                              repeats = 4,
+                              repeats = 2,
                               search = "grid")
 
 ### Knee 
@@ -188,8 +200,7 @@ xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
-                      objective = 'multi:softmax',
-                      metric = 'merror')
+                      metric = 'Rsquared')
 
 # Model Results 
 print(xgboost_knee)
@@ -205,12 +216,12 @@ cat('The optimal hyperparameters found for the knee model are', knee_optimal_hp,
 
 ### Hip 
 xgboost_hip <- train(PostOp_Q_EQ5D_Index ~ .,
-                      data = hipTrain,
-                      method = "xgbTree",
-                      trControl = xgboostControl,
-                      tuneGrid = xgboostGrid,
-                      verbose = TRUE,
-                      metric = 'Rsquared')
+                     data = hipTrain,
+                     method = "xgbTree",
+                     trControl = xgboostControl,
+                     tuneGrid = xgboostGrid,
+                     verbose = TRUE,
+                     metric = 'Rsquared')
 
 print(xgboost_hip)
 summary(xgboost_hip)
@@ -252,5 +263,4 @@ cat('The adjusted R^2 error of the groin model on the test data is ', groin_AdjR
 cat('The optimal hyperparameters found for the groin model are ', groin_optimal_hp,'\n')
 
 ############### Formatting Results ###############
-
 
