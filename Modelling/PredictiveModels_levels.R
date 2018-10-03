@@ -166,7 +166,7 @@ print(groin_test_AdjR2)
 ### Now with extensive hyperparameter optimisation ###
 
 # Set up grid to search 
-xgboostGrid <- expand.grid(nrounds = c(50, 100, 200, 800),
+xgboostGrid <- expand.grid(nrounds = c(50, 100, 300),
                            eta = c(0.1, 0.3, 0.5),
                            gamma = c(0, 0.5, 1)
                            subsample = c(0.5, 1), 
