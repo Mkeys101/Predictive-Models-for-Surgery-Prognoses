@@ -132,55 +132,12 @@ AdjR2 <- function(R2, p, N) {
 ####### XGBoost #######
 #######################
 
-# Convert training & test data to XGboost optimised sparse matrices
-knee_dtrain <- xgb.DMatrix(data = kneeTrain_data , label = kneeTrain_labels)
-hip_dtrain <- xgb.DMatrix(data = hipTrain_data , label = hipTrain_labels)
-groin_dtrain <- xgb.DMatrix(data = groinTrain_data , label = groinTrain_labels)
-
-knee_dtest <- xgb.DMatrix(data = kneeTest_data , label = kneeTest_labels)
-hip_dtest <- xgb.DMatrix(data = hipTest_data , label = hipTest_labels)
-groin_dtest <- xgb.DMatrix(data = groinTest_data , label = groinTest_labels)
-
-##### First runs (Postop level outcome) #####
-xgb_knee <- xgboost(data = knee_dtrain, nrounds=50)
-xgb_hip <- xgboost(data = hip_dtrain, nrounds=100)
-xgb_groin <- xgboost(data = groin_dtrain, nrounds=100)
-
-knee_pred <- predict(xgb_knee, knee_dtest)
-hip_pred <- predict(xgb_hip, hip_dtest)
-groin_pred <- predict(xgb_groin, groin_dtest)
-
-# Knee results 
-knee_test_R2 = R2(knee_pred, kneeTest_labels)
-knee_test_AdjR2 = AdjR2(knee_test_R2, ncol(kneeTest_data), nrow(kneeTest_data))
-
-print(knee_test_R2)
-print(knee_test_AdjR2)
-
-hip_test_R2 = R2(hip_pred, hipTest_labels)
-hip_test_AdjR2 = AdjR2(hip_test_R2, ncol(hipTest_data), nrow(hipTest_data))
-
-print(hip_test_R2)
-print(hip_test_AdjR2)
-
-groin_test_R2 = R2(groin_pred, groinTest_labels)
-groin_test_AdjR2 = AdjR2(groin_test_R2, ncol(groinTest_data), nrow(groinTest_data))
-
-print(groin_test_R2)
-print(groin_test_AdjR2)
-
-### Now with extensive hyperparameter optimisation ###
-
 # Set up grid to search 
 xgboostGrid <- expand.grid(nrounds = c(50, 100, 300),
-                           eta = c(0.1, 0.3, 0.5),
-                           gamma = c(0, 0.5, 1)
-                           subsample = c(0.5, 1), 
+                           eta = c(0.1, 0.3),
+                           gamma = c(0, 0.5),
                            colsample_bytree = c(0.5, 1),
-                           max_depth = c(3, 6, 12),
-                           min_child_weight = c(1, 3),
-                           lambda = c(1, 4), 
-                           alpha = c(0, 1))
+                           max_depth = c(3, 6))
 
 # Set up cross validation within the training set. 10 folds, 4 repeats. 
 xgboostControl = trainControl(method = "repeatedcv",
