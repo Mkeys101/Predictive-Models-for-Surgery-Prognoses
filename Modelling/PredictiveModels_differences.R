@@ -136,9 +136,11 @@ AdjR2 <- function(R2, p, N) {
 
 # Set up cross validation 
 xgboostGrid <- expand.grid(nrounds = c(50, 100, 300),
+                           subsample = c(1), 
                            eta = c(0.1, 0.3),
                            gamma = c(0, 0.5),
                            colsample_bytree = c(0.5, 1),
+                           min_child_weight = c(1),
                            max_depth = c(3, 6))
 
 # Set up cross validation within the training set. 10 folds, 4 repeats. 
@@ -147,11 +149,6 @@ xgboostControl = trainControl(method = "repeatedcv",
                               repeats = 4,
                               search = "grid")
 
-
-xgboostControl = trainControl(method = "repeatedcv",
-                              number = 10,
-                              repeats = 5,
-                              search = "grid")
 
 # Knee 
 xgboost_knee <- train(EQ5D_Index_Diff ~ .,
@@ -165,6 +162,18 @@ xgboost_knee <- train(EQ5D_Index_Diff ~ .,
 print(xgboost_knee)
 summary(xgboost_knee)
 
+# Model Results 
+print(xgboost_knee)
+summary(xgboost_knee)
+
+# Validation 
+knee_predict = predict(xgboost_knee, kneeTest_data)
+knee_R2 = R2(knee_predict, kneeTest_labels)
+knee_AdjR2 = AdjR2(knee_R2, ncol(kneeTest_data), nrow(kneeTest_data))
+knee_RMSE = rmse(kneeTest_labels, knee_predict)
+
+print(c(knee_R2, knee_AdjR2, knee_RMSE))
+
 # Hip 
 xgboost_hip <- train(EQ5D_Index_Diff ~ .,
                      data = hipTrain,
@@ -174,8 +183,17 @@ xgboost_hip <- train(EQ5D_Index_Diff ~ .,
                      verbose = TRUE,
                      metric = 'Rsquared')
 
+# Model Results
 print(xgboost_hip)
 summary(xgboost_hip)
+
+# Validation 
+hip_predict = predict(xgboost_hip, hipTest_data)
+hip_R2 = R2(hip_predict, hipTest_labels)
+hip_AdjR2 = AdjR2(hip_R2, ncol(hipTest_data), nrow(hipTest_data))
+hip_RMSE = rmse(hipTest_labels, hip_predict)
+
+print(c(hip_R2, hip_AdjR2, hip_RMSE))
 
 # Groin
 xgboost_knee <- train(EQ5D_Index_Diff ~ .,
@@ -186,8 +204,19 @@ xgboost_knee <- train(EQ5D_Index_Diff ~ .,
                       verbose = TRUE,
                       metric = 'Rsquared')
 
+# Model Results 
 print(xgboost_groin)
 summary(xgboost_groin)
 
+# Validation 
+groin_predict = predict(xgboost_groin, groinTest_data)
+groin_R2 = R2(groin_predict, groinTest_labels)
+groin_AdjR2 = AdjR2(groin_R2, ncol(groinTest_data), nrow(groinTest_data))
+groin_RMSE = rmse(groinTest_labels, groin_predict)
+
+print(c(groin_R2, groin_AdjR2, groin_RMSE))
+
 ############### Formatting Results ###############
+
+
 

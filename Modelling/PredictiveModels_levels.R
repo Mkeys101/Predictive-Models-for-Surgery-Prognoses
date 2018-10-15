@@ -134,9 +134,11 @@ AdjR2 <- function(R2, p, N) {
 
 # Set up grid to search 
 xgboostGrid <- expand.grid(nrounds = c(50, 100, 300),
+                           subsample = c(1), 
                            eta = c(0.1, 0.3),
                            gamma = c(0, 0.5),
                            colsample_bytree = c(0.5, 1),
+                           min_child_weight = c(1),
                            max_depth = c(3, 6))
 
 # Set up cross validation within the training set. 10 folds, 4 repeats. 
