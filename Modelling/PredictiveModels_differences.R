@@ -157,7 +157,8 @@ xgboost_knee <- train(EQ5D_Index_Diff ~ .,
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
-                      metric = 'Rsquared')
+                      objective = 'reg:linear',
+                      metric = 'rmse')
 
 print(xgboost_knee)
 summary(xgboost_knee)
@@ -181,7 +182,8 @@ xgboost_hip <- train(EQ5D_Index_Diff ~ .,
                      trControl = xgboostControl,
                      tuneGrid = xgboostGrid,
                      verbose = TRUE,
-                     metric = 'Rsquared')
+                     objective = 'reg:linear',
+                     metric = 'rmse')
 
 # Model Results
 print(xgboost_hip)
@@ -196,13 +198,14 @@ hip_RMSE = rmse(hipTest_labels, hip_predict)
 print(c(hip_R2, hip_AdjR2, hip_RMSE))
 
 # Groin
-xgboost_knee <- train(EQ5D_Index_Diff ~ .,
+xgboost_groin <- train(EQ5D_Index_Diff ~ .,
                       data = groinTrain,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
                       verbose = TRUE,
-                      metric = 'Rsquared')
+                      objective = 'reg:linear',
+                      metric = 'rmse')
 
 # Model Results 
 print(xgboost_groin)

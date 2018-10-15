@@ -153,9 +153,7 @@ xgboost_knee <- train(PostOp_Q_EQ5D_Index ~ .,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
-                      verbose = TRUE,
-                      objective = 'reg:linear',
-                      metric = c('Rsquared', 'rmse'))
+                      metric = 'RMSE')
 
 # Model Results 
 print(xgboost_knee)
@@ -175,9 +173,7 @@ xgboost_hip <- train(PostOp_Q_EQ5D_Index ~ .,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
-                      verbose = TRUE,
-                      objective = 'reg:linear',
-                      metric = c('Rsquared', 'rmse'))
+                      metric = 'RMSE')
 
 # Model Results 
 print(xgboost_hip)
@@ -197,9 +193,7 @@ xgboost_groin <- train(PostOp_Q_EQ5D_Index ~ .,
                       method = "xgbTree",
                       trControl = xgboostControl,
                       tuneGrid = xgboostGrid,
-                      verbose = TRUE,
-                      eval = 'reg:linear',
-                      metric = c('Rsquared', 'rmse'))
+                      metric = 'RMSE')
                       
 # Model Results 
 print(xgboost_groin)
@@ -213,6 +207,15 @@ groin_RMSE = rmse(groinTest_labels, groin_predict)
 
 print(c(groin_R2, groin_AdjR2, groin_RMSE))
 
-############### Formatting Results ###############
+############### Formatting Predictive Results ###############
+
+
+
+
+############### Feature Importance ############### 
+
+
+
+
 
 
